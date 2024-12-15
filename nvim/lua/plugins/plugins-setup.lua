@@ -79,6 +79,11 @@ require("lazy").setup({
         dependencies = { 'nvim-lua/plenary.nvim' }
     },
 
+    {   
+        "numToStr/Comment.nvim",
+        event = "VeryLazy",
+    },
+
 })
 
 require("mason").setup()
@@ -94,8 +99,11 @@ require("plugins.nvim-tree")
 require("plugins.Telescope")
 -- vim-tmux-navigator
 require("plugins.vim-tmux-navigator")
+-- comment
+require("plugins.Comment")
 -- nvim-treesitter
 -- require("plugins.nvim-treesitter")
 -- lsp mason
 require("lsp-mason.lsp_config")
 require("lsp-mason.cmp")
+

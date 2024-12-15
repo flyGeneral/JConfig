@@ -31,3 +31,8 @@ keymap.set("n", "<leader>nh", ":nohl<CR>")
 -- 插件
 -- nvim-tree
 keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
+
+keymap.set("n", "<leader>f", ":Telescope find_files<CR>")
+keymap.set("n", "<leader>g", ":Telescope live_grep<CR>")
+keymap.set("n", "<leader>rs", ":Telescope resume<CR>")
+keymap.set("n", "<leader>o", ":Telescope oldfiles<CR>")

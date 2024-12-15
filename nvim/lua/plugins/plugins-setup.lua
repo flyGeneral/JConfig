@@ -25,6 +25,12 @@ require("lazy").setup({
     {
         "christoomey/vim-tmux-navigator"
     },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        dependencies = {
+            "p00f/nvim-ts-rainbow"
+        },
+    },  
 
 })
 
@@ -34,3 +40,5 @@ require("plugins.lualine");
 require("plugins.nvim-tree")
 -- vim-tmux-navigator
 require("plugins.vim-tmux-navigator")
+-- nvim-treesitter
+require("plugins.nvim-treesitter")

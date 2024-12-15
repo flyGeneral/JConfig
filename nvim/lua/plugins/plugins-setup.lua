@@ -32,6 +32,11 @@ require("lazy").setup({
     --     },
     -- },
 
+    { 
+        "akinsho/bufferline.nvim", version = "*", 
+        dependencies = "nvim-tree/nvim-web-devicons"
+    },
+
     {   
         "windwp/nvim-autopairs",
         event = "VeryLazy",
@@ -72,7 +77,8 @@ require("lazy").setup({
         'nvim-telescope/telescope.nvim', tag = '0.1.5',
         -- or                          , branch = '0.1.x',
         dependencies = { 'nvim-lua/plenary.nvim' }
-     }
+    },
+
 })
 
 require("mason").setup()
@@ -80,6 +86,8 @@ require("mason-lspconfig").setup()
 
 -- 状态栏插件
 require("plugins.lualine");
+-- bufferline
+require("plugins.bufferline")
 -- nvim-tree
 require("plugins.nvim-tree")
 -- Telescope

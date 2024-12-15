@@ -36,3 +36,25 @@ keymap.set("n", "<leader>f", ":Telescope find_files<CR>")
 keymap.set("n", "<leader>g", ":Telescope live_grep<CR>")
 keymap.set("n", "<leader>rs", ":Telescope resume<CR>")
 keymap.set("n", "<leader>o", ":Telescope oldfiles<CR>")
+
+-- 快速在buffer间跳转
+keymap.set("n", "<leader>b1", ":BufferLineGoToBuffer 1<CR>" )
+keymap.set("n", "<leader>b2", ":BufferLineGoToBuffer 2<CR>" )
+keymap.set("n", "<leader>b3", ":BufferLineGoToBuffer 3<CR>" )
+keymap.set("n", "<leader>b4", ":BufferLineGoToBuffer 4<CR>" )
+keymap.set("n", "<leader>b5", ":BufferLineGoToBuffer 5<CR>" )
+keymap.set("n", "<leader>b6", ":BufferLineGoToBuffer 6<CR>" )
+keymap.set("n", "<leader>b7", ":BufferLineGoToBuffer 7<CR>" )
+keymap.set("n", "<leader>b8", ":BufferLineGoToBuffer 8<CR>" )
+keymap.set("n", "<leader>b9", ":BufferLineGoToBuffer 9<CR>" )
+keymap.set("n", "<leader>bg", ":BufferLinePick" )
+
+keymap.set("n", "bn", ":BufferLineCycleNext<CR>" )
+keymap.set("n", "bp", ":BufferLineCyclePrev<CR>" )
+
+--- 关闭当前 buffer
+keymap.set("n", "<leader>bc", ":bdelete %<CR>" )
+--- 关闭指定 buffer
+keymap.set("n", "<leader>bp", ":BufferLinePickClose<CR>" )
+--- 关闭除当前buffer外的所有buffer
+keymap.set("n", "<leader>bo", ":BufferLineCloseLeft<CR>:BufferLineCloseRight<CR>" )

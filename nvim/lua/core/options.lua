@@ -37,8 +37,8 @@ vim.opt.signcolumn = "yes"
 
 
 -- utf8
-vim.g.encoding = "UTF-8"
-vim.o.fileencoding = "utf-8"
+-- vim.g.encoding = "UTF-8"
+-- vim.o.fileencoding = "utf-8"
 -- jkhl 移动时光标周围保留8行
 vim.o.scrolloff = 8
 vim.o.sidescrolloff = 8
@@ -98,6 +98,10 @@ vim.o.pumheight = 10
 vim.o.showtabline = 2
 -- 使用增强状态栏插件后不再需要 vim 的模式提示
 vim.o.showmode = false
+
+
+-- start theme
+vim.cmd[[colorscheme tokyonight]]
 
 -- nvim 0.9 发现把宏定义也识别成注释，Google 配置解决
 vim.api.nvim_set_hl(0, '@lsp.type.comment.cpp', {})

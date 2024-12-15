@@ -27,3 +27,7 @@ keymap.set("n", "<leader>sh", "<C-w>s")
 
 -- nvim split screen
 keymap.set("n", "<leader>nh", ":nohl<CR>")
+
+-- 插件
+-- nvim-tree
+keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")

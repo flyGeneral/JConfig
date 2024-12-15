@@ -22,6 +22,9 @@ require("lazy").setup({
         "nvim-tree/nvim-tree.lua",
         dependencies = "nvim-tree/nvim-web-devicons",
     },
+    {
+        "christoomey/vim-tmux-navigator"
+    },
 
 })
 
@@ -29,3 +32,5 @@ require("lazy").setup({
 require("plugins.lualine");
 -- nvim-tree
 require("plugins.nvim-tree")
+-- vim-tmux-navigator
+require("plugins.vim-tmux-navigator")

@@ -101,6 +101,13 @@ require("lazy").setup({
             vim.cmd.cnoreabbrev([[gp Git push]])
         end,
     },
+    -- quick move
+    {
+        "ggandor/leap.nvim",
+        config = function()
+            require('leap').add_default_mappings()
+        end,
+    },
 })
 
 require("mason").setup()

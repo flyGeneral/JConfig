@@ -9,7 +9,7 @@ vim.opt.expandtab = true
 vim.opt.autoindent = true
 
 -- 禁止折行，包裹
-vim.wo.wrap = false
+vim.wo.wrap = true
 
 -- 高亮所在行
 vim.opt.cursorline = true

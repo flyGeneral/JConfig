@@ -108,17 +108,6 @@ require("lazy").setup({
             require('leap').add_default_mappings()
         end,
     },
-    {
-        "hedyhli/outline.nvim",
-        lazy = true,
-        cmd = { "Outline", "OutlineOpen" },
-        keys = { -- Example mapping to toggle outline
-            { "<leader>l", "<cmd>Outline<CR>", desc = "Toggle outline" },
-        },
-        opts = {
-            -- Your setup opts here
-        },
-    },
 })
 
 require("mason").setup()

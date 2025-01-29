@@ -25,12 +25,22 @@ require("lazy").setup({
     {
         "christoomey/vim-tmux-navigator"
     },
-    -- {
-    --     "nvim-treesitter/nvim-treesitter",
-    --     dependencies = {
-    --         "p00f/nvim-ts-rainbow"
-    --     },
-    -- },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        dependencies = {
+            "p00f/nvim-ts-rainbow"
+        },
+    },
+
+    {
+        'stevearc/aerial.nvim',
+        opts = {},
+        -- Optional dependencies
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons"
+        },
+    },
 
     { 
         "akinsho/bufferline.nvim", version = "*", 
@@ -126,7 +136,9 @@ require("plugins.vim-tmux-navigator")
 -- comment
 require("plugins.Comment")
 -- nvim-treesitter
--- require("plugins.nvim-treesitter")
+require("plugins.nvim-treesitter")
+-- aerial
+require("plugins.aerial")
 -- lsp mason
 require("lsp-mason.lsp_config")
 require("lsp-mason.cmp")

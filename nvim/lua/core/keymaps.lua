@@ -37,6 +37,12 @@ keymap.set("n", "<leader>g", ":Telescope live_grep<CR>")
 keymap.set("n", "<leader>rs", ":Telescope resume<CR>")
 keymap.set("n", "<leader>o", ":Telescope oldfiles<CR>")
 
+-- aerial.nvim
+keymap.set("n", "<leader>a", ":AerialToggle<CR>")
+keymap.set("n", "<leader>af", ":AerialNavToggle<CR>")
+keymap.set("n", "<C-]>", ":AerialNext<CR>")
+keymap.set("n", "<C-[>", ":AerialPrev<CR>")
+
 -- 快速在buffer间跳转
 keymap.set("n", "<leader>b1", ":BufferLineGoToBuffer 1<CR>" )
 keymap.set("n", "<leader>b2", ":BufferLineGoToBuffer 2<CR>" )

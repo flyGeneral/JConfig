@@ -105,3 +105,28 @@ vim.cmd[[colorscheme tokyonight]]
 
 -- nvim 0.9 发现把宏定义也识别成注释，Google 配置解决
 vim.api.nvim_set_hl(0, '@lsp.type.comment.cpp', {})
+
+-- highlight on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("UserHighlightYank", { clear = true }),
+    callback = function()
+        vim.highlight.on_yank({ higroup = "Visual" })
+    end,
+})
+
+-- go to last location when opening a buffer
+vim.api.nvim_create_autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("UserLastLoc", { clear = true }),
+    callback = function(event)
+      local exclude = { "gitcommit" }
+      local buf = event.buf
+      if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].user_last_loc then
+        return
+      end
+      vim.b[buf].user_last_loc = true
+      local mark = vim.api.nvim_buf_get_mark(buf, '"')
+      if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(buf) then
+        pcall(vim.api.nvim_win_set_cursor, 0, mark)
+      end
+    end,
+})

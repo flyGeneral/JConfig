@@ -111,6 +111,10 @@ require("lazy").setup({
             vim.cmd.cnoreabbrev([[gp Git push]])
         end,
     },
+    {
+        "sindrets/diffview.nvim",
+    },
+
     -- quick move
     {
         "ggandor/leap.nvim",

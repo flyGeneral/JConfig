@@ -143,6 +143,8 @@ require("plugins.Comment")
 require("plugins.nvim-treesitter")
 -- aerial
 require("plugins.aerial")
+-- gitsigns
+require("plugins.gitsigns")
 -- lsp mason
 require("lsp-mason.lsp_config")
 require("lsp-mason.cmp")

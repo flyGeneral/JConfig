@@ -114,7 +114,24 @@ require("lazy").setup({
     {
         "sindrets/diffview.nvim",
     },
-
+    {
+        "kdheepak/lazygit.nvim",
+        cmd = {
+          "LazyGit",
+          "LazyGitConfig",
+          "LazyGitCurrentFile",
+          "LazyGitFilter",
+          "LazyGitFilterCurrentFile",
+        },
+        -- 可选，用于浮动窗口边框装饰
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+        },
+        -- 建议设置 'keys' 以在首次运行命令时加载插件
+        keys = {
+          { "<leader>lg", "<cmd>LazyGit<cr>", desc = "启动 LazyGit" }
+        }
+    },
     -- quick move
     {
         "ggandor/leap.nvim",

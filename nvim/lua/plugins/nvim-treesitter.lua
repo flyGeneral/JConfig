@@ -1,7 +1,12 @@
 require'nvim-treesitter.configs'.setup {
-    -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-    ensure_installed = { "vim", "bash", "c", "cpp", "javascript", "java",
-        "json", "lua", "python", "query" },
+    -- 按日常使用的语言维护：C/C++/Java/Python/Markdown/Makefile 及常见工程文件
+    ensure_installed = {
+        "c", "cpp", "java", "python",               -- 主力语言
+        "markdown", "markdown_inline",               -- Markdown（markdown_inline 覆盖代码块内嵌内容）
+        "make", "cmake",                             -- 构建脚本
+        "json", "yaml", "toml", "xml",               -- 工程/配置文件（xml 覆盖 pom.xml 等）
+        "bash", "vim", "lua", "query", "comment",    -- 工具链与 nvim 自身
+    },
 
     highlight = {
         enable = true,
@@ -11,10 +16,5 @@ require'nvim-treesitter.configs'.setup {
         enable = true
     },
 
-    -- 不同括号颜色区分
-    rainbow = {
-        enable = true,
-        extended_mode = true,
-        max_file_lines = nil,
-    }
+    -- 彩虹括号已迁移到 rainbow-delimiters.nvim（见 plugins-setup.lua）
   }

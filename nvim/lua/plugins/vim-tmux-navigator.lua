@@ -1,1 +1,3 @@
-require("lazy").setup()
+-- vim-tmux-navigator 默认键位即可，无需额外 Lua 配置。
+-- 注意：若要 <C-h>/<C-j>/<C-k>/<C-l> 穿透到 tmux pane，
+-- 需要在 tmux 侧安装 christoomey/vim-tmux-navigator 并配置 is_vim 判断。

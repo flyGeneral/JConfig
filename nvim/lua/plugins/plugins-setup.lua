@@ -1,6 +1,6 @@
 -- lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -18,7 +18,8 @@ require("lazy").setup({
         "nvim-lualine/lualine.nvim",
         dependencies = {"nvim-tree/nvim-web-devicons", opt = true},
     },
-    { 
+    {
+        -- 上游已归档（只读维护），功能仍正常；日后如需替换可考虑 oil.nvim
         "nvim-tree/nvim-tree.lua",
         dependencies = "nvim-tree/nvim-web-devicons",
     },
@@ -27,9 +28,17 @@ require("lazy").setup({
     },
     {
         "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            "p00f/nvim-ts-rainbow"
-        },
+        -- master 分支是传统实现（ensure_installed 等旧式配置 API），
+        -- main 分支是重写版（API 不兼容）。本配置使用旧式 API，固定 master。
+        branch = "master",
+        build = ":TSUpdate",
+    },
+    {
+        -- nvim-ts-rainbow 已归档，这是同一作者维护中的继任者
+        "HiPhish/rainbow-delimiters.nvim",
+        config = function()
+            require("rainbow-delimiters.setup").setup({})
+        end,
     },
 
     {
@@ -42,12 +51,12 @@ require("lazy").setup({
         },
     },
 
-    { 
-        "akinsho/bufferline.nvim", version = "*", 
+    {
+        "akinsho/bufferline.nvim", version = "*",
         dependencies = "nvim-tree/nvim-web-devicons"
     },
 
-    {   
+    {
         "windwp/nvim-autopairs",
         event = "VeryLazy",
         config = function()
@@ -72,34 +81,54 @@ require("lazy").setup({
 
     {
         event = "VeryLazy",
-        "williamboman/mason.nvim",
+        -- 仓库已从 williamboman 迁移到 mason-org
+        "mason-org/mason.nvim",
         build = ":MasonUpdate", -- :MasonUpdate updates registry contents
     },
 
     {
         event = "VeryLazy",
         "neovim/nvim-lspconfig",
-        dependencies = { "williamboman/mason-lspconfig.nvim" },
+    },
+
+    {
+        -- 官方已废弃（功能并入 nvim 0.11+ 原生 LSP），但仍是
+        -- "mason 自动安装 + 自动 vim.lsp.enable" 的最简方案
+        "mason-org/mason-lspconfig.nvim",
+        dependencies = { "mason-org/mason.nvim" },
+    },
+
+    -- Java: eclipse.jdt.ls 客户端（官方推荐替代 lspconfig.jdtls），
+    -- 首次打开 java 文件时启动，见 lua/lsp/java.lua
+    {
+        "mfussenegger/nvim-jdtls",
+        ft = { "java" },
+    },
+
+    -- Markdown 阅读增强：终端内渲染标题/表格/代码块
+    {
+        "MeanderingProgrammer/render-markdown.nvim",
+        ft = { "markdown" },
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons"
+        },
+        opts = {},
     },
 
     {
         cmd = "Telescope",
-        'nvim-telescope/telescope.nvim', tag = '0.1.5',
-        -- or                          , branch = '0.1.x',
+        'nvim-telescope/telescope.nvim',
+        -- 版本由 lazy-lock.json 锁定 commit，保证可复现；更新时用 :Lazy sync
         dependencies = { 'nvim-lua/plenary.nvim' }
     },
 
-    {   
-        "numToStr/Comment.nvim",
-        event = "VeryLazy",
-    },
+    -- 注释使用 nvim 0.10+ 内置的 gc/gcc，不再需要 Comment.nvim
+
     -- git plugin
     {
         event = "VeryLazy",
         "lewis6991/gitsigns.nvim",
-        config = function()
-            require("gitsigns").setup()
-        end,
     },
     {
         event = "VeryLazy",
@@ -134,15 +163,19 @@ require("lazy").setup({
     },
     -- quick move
     {
-        "ggandor/leap.nvim",
+        -- leap 官方仓库已迁至 Codeberg（GitHub 原仓库已被作者清空）
+        url = "https://codeberg.org/andyg/leap.nvim.git",
+        dependencies = { "tpope/vim-repeat" },
         config = function()
-            require('leap').add_default_mappings()
+            local leap = require('leap')
+            if leap.create_default_mappings then
+                leap.create_default_mappings()
+            else
+                leap.add_default_mappings()
+            end
         end,
     },
 })
-
-require("mason").setup()
-require("mason-lspconfig").setup()
 
 -- 状态栏插件
 require("plugins.lualine");
@@ -152,10 +185,7 @@ require("plugins.bufferline")
 require("plugins.nvim-tree")
 -- Telescope
 require("plugins.Telescope")
--- vim-tmux-navigator
-require("plugins.vim-tmux-navigator")
--- comment
-require("plugins.Comment")
+-- vim-tmux-navigator 默认键位即可，无需 Lua 配置
 -- nvim-treesitter
 require("plugins.nvim-treesitter")
 -- aerial
@@ -165,4 +195,3 @@ require("plugins.gitsigns")
 -- lsp mason
 require("lsp-mason.lsp_config")
 require("lsp-mason.cmp")
-

@@ -40,8 +40,9 @@ keymap.set("n", "<leader>o", ":Telescope oldfiles<CR>")
 -- aerial.nvim
 keymap.set("n", "<leader>a", ":AerialToggle<CR>")
 keymap.set("n", "<leader>af", ":AerialNavToggle<CR>")
-keymap.set("n", "<C-]>", ":AerialNext<CR>")
-keymap.set("n", "<C-[>", ":AerialPrev<CR>")
+-- 注意: <C-[> 等同于 ESC，不能用作快捷键，这里用 ]a / [a
+keymap.set("n", "]a", ":AerialNext<CR>")
+keymap.set("n", "[a", ":AerialPrev<CR>")
 
 -- 快速在buffer间跳转
 keymap.set("n", "<leader>b1", ":BufferLineGoToBuffer 1<CR>" )

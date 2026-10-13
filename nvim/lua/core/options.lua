@@ -2,13 +2,16 @@
 vim.opt.number = true
 vim.opt.relativenumber = true
 
+-- 用户级二进制目录(lazygit 等)，保证非 shell 启动 nvim 时也能找到
+vim.env.PATH = vim.fn.expand("~/.local/bin") .. ":" .. vim.env.PATH
+
 -- 缩进4个空格等于一个Tab
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 
--- 禁止折行，包裹
+-- 长行自动折行显示
 vim.wo.wrap = true
 
 -- 高亮所在行
@@ -66,8 +69,7 @@ vim.bo.autoread = true
 
 -- 光标在行首尾时<Left><Right>可以跳到下一行
 vim.o.whichwrap = "<,>,[,]"
--- 允许隐藏被修改过的buffer
-vim.o.hidden = true
+-- ('hidden' 自 0.10 起默认开启且不可关闭，无需设置)
 
 -- 禁止创建备份文件
 vim.o.backup = false
@@ -80,10 +82,7 @@ vim.o.updatetime = 300
 vim.o.timeoutlen = 500
 
 -- 自动补全不自动选中
-vim.g.completeopt = "menu,menuone,noselect,noinsert"
--- 样式
-vim.o.termguicolors = true
-vim.opt.termguicolors = true
+vim.opt.completeopt = "menu,menuone,noselect,noinsert"
 -- 是否显示不可见字符
 vim.o.list = false
 -- 不可见字符的显示，这里只把空格显示为一个点
@@ -110,7 +109,7 @@ vim.api.nvim_set_hl(0, '@lsp.type.comment.cpp', {})
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = vim.api.nvim_create_augroup("UserHighlightYank", { clear = true }),
     callback = function()
-        vim.highlight.on_yank({ higroup = "Visual" })
+        vim.hl.on_yank({ higroup = "Visual" })
     end,
 })
 

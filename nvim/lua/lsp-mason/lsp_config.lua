@@ -1,122 +1,78 @@
-
-local luasnip = require("luasnip")
-local cmp = require("cmp")
-local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-cmp.setup({
-	snippet = {
-		-- REQUIRED - you must specify a snippet engine
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-			-- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-		end,
-	},
-	window = {
-		-- completion = cmp.config.window.bordered(),
-		-- documentation = cmp.config.window.bordered(),
-	},
-	mapping = cmp.mapping.preset.insert({
-		["C-n"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-				-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-				-- they way you will only jump inside the snippet region
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			elseif has_words_before() then
-				cmp.complete()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-
-		["C-p"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-		["<C-b>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-c>"] = cmp.mapping.abort(),
-		-- 出现补全
-        ['<A-.>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
-        -- 取消补全
-        ['<A-,>'] = cmp.mapping({
-            i = cmp.mapping.abort(),
-            c = cmp.mapping.close(),
-        }),
-
-        -- 确认使用某个补全项
-        ['<CR>'] = cmp.mapping.confirm({
-            select = true,
-            behavior = cmp.ConfirmBehavior.Replace
-        }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-	}),
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" }, -- For luasnip users.
-		-- { name = 'ultisnips' }, -- For ultisnips users.
-		-- { name = 'snippy' }, -- For snippy users.
-	}, {
-		{ name = "buffer" },
-	}),
-})
-
+-- LSP 配置（补全见 lsp-mason/cmp.lua）
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
-require("lspconfig").lua_ls.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim", "hs" },
-			},
-			workspace = {
-				checkThirdParty = false,
-				-- Make the server aware of Neovim runtime files
-				library = {
-					-- vim.api.nvim_get_runtime_file("", true),
-					-- "/Applications/Hammerspoon.app/Contents/Resources/extensions/hs/",
-					-- vim.fn.expand("~/lualib/share/lua/5.4"),
-					-- vim.fn.expand("~/lualib/lib/luarocks/rocks-5.4"),
-					-- "/opt/homebrew/opt/openresty/lualib",
-				},
-			},
-			completion = {
-				callSnippet = "Replace",
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
+
+require("mason").setup()
+require("mason-lspconfig").setup({
+    -- mason 包名；安装后自动 vim.lsp.enable（v2 默认行为）
+    ensure_installed = {
+        "clangd",               -- C / C++
+        "jdtls",                -- Java：只装二进制，启动由 nvim-jdtls 接管（见 lua/lsp/java.lua）
+        "pyright",              -- Python 类型检查
+        "ruff",                 -- Python lint + format（与 pyright 各司其职，可共存）
+        "marksman",             -- Markdown 大纲/链接/补全
+        "lua-language-server",  -- nvim 配置开发
+    },
+    automatic_enable = function(server)
+        -- jdtls 由 nvim-jdtls 管理，避免被重复启动
+        return server ~= "jdtls"
+    end,
 })
 
-require("lspconfig").pyright.setup({
+-- 各 server 的能力/行为微调（vim.lsp.enable 是 nvim 0.11+ 标准写法）
+vim.lsp.config("lua_ls", {
     capabilities = capabilities,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = "LuaJIT",
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = { "vim", "hs" },
+            },
+            workspace = {
+                checkThirdParty = false,
+                -- Make the server aware of Neovim runtime files
+                library = {
+                    -- vim.api.nvim_get_runtime_file("", true),
+                },
+            },
+            completion = {
+                callSnippet = "Replace",
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
+    },
 })
 
-require("lspconfig").jdtls.setup({
-    capabilities = capabilities,
+vim.lsp.config("clangd", { capabilities = capabilities })
+vim.lsp.config("pyright", { capabilities = capabilities })
+vim.lsp.config("ruff", { capabilities = capabilities })
+vim.lsp.config("marksman", { capabilities = capabilities })
+
+-- 显式启用（enable 幂等，同时兜底 automatic_enable 未覆盖的场景）
+vim.lsp.enable({ "lua_ls", "clangd", "pyright", "ruff", "marksman" })
+
+-- Java 由 nvim-jdtls 接管（依赖 JDK 17+，未安装时会给出提示）
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "java",
+    group = vim.api.nvim_create_augroup("UserJavaLsp", { clear = true }),
+    callback = function()
+        require("lsp.java").start()
+    end,
 })
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+-- 注意: <leader>e 已被 nvim-tree 占用，这里用 <leader>df
+vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float)
+-- goto_prev/goto_next 在 0.11+ 已废弃，改用 jump
+vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end)
+vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys

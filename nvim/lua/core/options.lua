@@ -18,6 +18,9 @@ vim.wo.wrap = true
 vim.opt.cursorline = true
 vim.opt.cursorcolumn = true
 
+-- 鼠标拖选后按 y 复制到系统剪贴板(unnamedplus → tmux load-buffer -w → OSC52 → Mac)
+-- Mac 终端的 ⌘C 在 nvim 内无效(拖选被 nvim 接管,终端无选区);详见 KEYMAPS.md「鼠标 / 剪贴板」
+-- 故意不加 <LeftRelease> 自动 yank:拖选后手动按 y 更灵活,避免乱复制
 -- 鼠标支持
 vim.o.mouse = "a"
 
